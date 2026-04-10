@@ -5,7 +5,8 @@ def hadoop(input_folder, output_folder, mapper_fn, reducer_fn):
 
     def read_records_from_input(input_folder):
         sequence = []
-        files = glob.glob(f"{input_folder}*")
+        path = os.path.join(input_folder, "*")
+        files = glob.glob(path)
         for file in files:
             with open(file, "r", encoding="utf-8") as f:
                 for line in f:
@@ -13,12 +14,14 @@ def hadoop(input_folder, output_folder, mapper_fn, reducer_fn):
         return sequence
 
     def save_results_to_output(result):
-        with open("files/output/part-00000", "w", encoding="utf-8") as f:
+        filename = os.path.join(output_folder, "part-00000")
+        with open(filename, "w", encoding="utf-8") as f:
             for key, value in result:
                 f.write(f"{key}\t{value}\n")
 
     def create_success_file(output_folder):
-        with open(os.path.join(output_folder, "_SUCCESS"), "w", encoding="utf-8") as f:
+        filename = os.path.join(output_folder, "_SUCCESS")
+        with open(filename, "w", encoding="utf-8") as f:
             f.write("")
 
     def create_output_directory(output_folder):
